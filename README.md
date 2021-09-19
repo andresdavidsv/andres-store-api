@@ -41,6 +41,10 @@ Nest is [MIT licensed](LICENSE).
 - Pipeslines Generate => nest g pi common/parse-int
 - Modules Generate => nest g mo users
 - Resource Generate => nest g resource orders
+- Global Module Generate => nest g mo database
 
 ## Dependences Example
 - Class Validator and Mapped Types => npm i class-validator class-transformer @nestjs/mapped-types
+- Config Env => npm i @nestjs/config
+- Joi => npm i --save joi
+- Documentation => npm install --save @nestjs/swagger swagger-ui-express
