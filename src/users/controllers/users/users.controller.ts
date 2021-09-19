@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 
 import { UsersService } from '../../services/users/users.service';
-import { ParseIntPipe } from '../../common/parse-int.pipe';
+import { ParseIntPipe } from '../../../common/parse-int.pipe';
 import { CreateUserDto, UpdateUserDto } from '../../dtos/user.dto';
 
 @Controller('users')
@@ -27,6 +27,11 @@ export class UsersController {
   @HttpCode(HttpStatus.ACCEPTED)
   getOne(@Param('userId', ParseIntPipe) userId: number) {
     return this.usersService.findOne(userId);
+  }
+  @Get(':userId/orders')
+  @HttpCode(HttpStatus.ACCEPTED)
+  getOrders(@Param('userId', ParseIntPipe) userId: number) {
+    return this.usersService.getOrderByUser(userId);
   }
 
   @Post()

@@ -11,8 +11,8 @@ import {
 } from '@nestjs/common';
 
 import { CategoriesService } from '../../services/categories/categories.service';
-import { ParseIntPipe } from '../../common/parse-int.pipe';
-import { CreateCategoryDto, UpdateCategoryDto } from '../../dtos/category.dto';
+import { ParseIntPipe } from '../../../common/parse-int.pipe';
+import { CreateCategoryDto, UpdateCategoryDto } from '../../dto/category.dto';
 
 @Controller('categories')
 export class CategoriesController {
