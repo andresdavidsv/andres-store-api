@@ -38,3 +38,7 @@ Nest is [MIT licensed](LICENSE).
 
 - Controllers Generate => nest g co controllers/categories
 - Services Generate => nest g s services/products
+- Pipeslines Generate => nest g pi common/parse-int
+
+## Dependences Example
+- Class Validator and Mapped Types => npm i class-validator class-transformer @nestjs/mapped-types
