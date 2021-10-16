@@ -48,3 +48,21 @@ Nest is [MIT licensed](LICENSE).
 - Config Env => npm i @nestjs/config
 - Joi => npm i --save joi
 - Documentation => npm install --save @nestjs/swagger swagger-ui-express
+
+## Docker Config
+- docker compose up -d andresStoreDb
+- docker compose ps
+- docker compose down
+### Logs
+- docker compose logs -f andresStoreDb
+### Unix System
+- docker compose exec andresStoreDb bash
+### Conection to my DB
+- psql -h localhost -d andres_store_db -U root
+- View my Data => \d+
+- Exit from my Data => \q
+- Exit from my container => exit
+### Driver PostgreSQL
+- npm install pg
+- npm install @types/pg -D
+- npm install --save @nestjs/typeorm typeorm

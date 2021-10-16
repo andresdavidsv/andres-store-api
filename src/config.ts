@@ -5,6 +5,13 @@ export default registerAs('config', () => {
       name: process.env.DATABASE_NAME,
       port: process.env.DATABASE_PORT,
     },
+    postgresql: {
+      dbName: process.env.POSTGRES_DB,
+      dbUser: process.env.POSTGRES_USER,
+      dbPassword: process.env.POSTGRES_PASSWORD,
+      dbPort: parseInt(process.env.POSTGRES_PORT, 10),
+      dbHost: process.env.POSTGRES_HOST,
+    },
     apiKey: process.env.API_KEY,
   };
 });
