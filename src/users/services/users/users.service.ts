@@ -1,91 +1,100 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+
 import { User } from 'src/users/entities/user.entity';
-import { Order } from 'src/users/entities/order.entity';
+// import { Order } from 'src/users/entities/order.entity';
 import { CreateUserDto, UpdateUserDto } from '../../dtos/user.dto';
 import { Client } from 'pg';
 
 import { ProductsService } from 'src/products/services/products/products.service';
-import { ConfigService } from '@nestjs/config';
+// import { genericService } from 'src/common/genericService.service';
+import { CustomersService } from '../customers/customers.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     private productsService: ProductsService,
-    private configService: ConfigService,
+    private customersService: CustomersService,
     @Inject('PG') private clientPg: Client,
+    @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
-  private counterId = 1;
-  private users: User[] = [
-    {
-      id: 1,
-      email: 'asoalrte@mail.com',
-      password: 'dasdasd',
-      role: 'admin',
-    },
-  ];
 
   findAll() {
-    const apiKey = this.configService.get('API_KEY');
-    console.log(apiKey);
-    return this.users;
+    // const apiKey = this.configService.get('API_KEY');
+    // console.log(apiKey);
+    // return this.users;
+    return this.userRepository.find({
+      relations: ['customer'],
+    });
   }
 
-  findOne(id: number) {
-    const user = this.users.find((item) => item.id === id);
+  async findOne(id: number) {
+    const user = await this.userRepository.findOne(id);
     if (!user) {
       throw new NotFoundException(`User #${id} not found`);
     }
     return user;
   }
 
-  create(payload: CreateUserDto) {
-    this.counterId = this.counterId + 1;
-    const newUser = {
-      id: this.counterId,
-      ...payload,
-    };
-    this.users.push(newUser);
-    return newUser;
-  }
-
-  update(id: number, payload: UpdateUserDto) {
-    const user = this.findOne(id);
-    if (user) {
-      const index = this.users.findIndex((item) => item.id === id);
-      this.users[index] = {
-        ...user,
-        ...payload,
-      };
-      return this.users[index];
+  async create(payload: CreateUserDto) {
+    const newUser = this.userRepository.create(payload);
+    if (payload.customerId) {
+      const customer = await this.customersService.findOne(payload.customerId);
+      newUser.customer = customer;
     }
-    return null;
+    return this.userRepository.save(newUser);
   }
 
-  delete(id: number) {
-    const index = this.users.findIndex((item) => item.id === id);
-    if (index === -1) {
-      throw new NotFoundException(`User #${id} not found`);
-    }
-    this.users.splice(index, 1);
-    return true;
+  async update(id: number, payload: UpdateUserDto) {
+    const user = await this.findOne(id);
+    this.userRepository.merge(user, payload);
+    return this.userRepository.save(user);
   }
 
-  async getOrderByUser(id: number) {
-    const user = this.findOne(id);
-    return {
-      date: new Date(),
-      user,
-      products: await this.productsService.findAll(),
-    };
+  async delete(id: number) {
+    await this.findOne(id);
+    return this.userRepository.delete(id);
   }
-  getTasks() {
-    return new Promise((resolve, reject) => {
-      this.clientPg.query('SELECT * FROM tasks', (err, res) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(res.rows);
-      });
-    });
-  }
+
+  // update(id: number, payload: UpdateUserDto) {
+  //   const user = this.findOne(id);
+  //   if (user) {
+  //     const index = this.users.findIndex((item) => item.id === id);
+  //     this.users[index] = {
+  //       ...user,
+  //       ...payload,
+  //     };
+  //     return this.users[index];
+  //   }
+  //   return null;
+  // }
+
+  // delete(id: number) {
+  //   const index = this.users.findIndex((item) => item.id === id);
+  //   if (index === -1) {
+  //     throw new NotFoundException(`User #${id} not found`);
+  //   }
+  //   this.users.splice(index, 1);
+  //   return true;
+  // }
+
+  // async getOrderByUser(id: number) {
+  //   const user = this.findOne(id);
+  //   return {
+  //     date: new Date(),
+  //     user,
+  //     products: await this.productsService.findAll(),
+  //   };
+  // }
+  // getTasks() {
+  //   return new Promise((resolve, reject) => {
+  //     this.clientPg.query('SELECT * FROM tasks', (err, res) => {
+  //       if (err) {
+  //         reject(err);
+  //       }
+  //       resolve(res.rows);
+  //     });
+  //   });
+  // }
 }

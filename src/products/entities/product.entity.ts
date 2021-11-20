@@ -1,5 +1,20 @@
-import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
-@Entity()
+import {
+  PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+  ManyToMany,
+  JoinTable,
+  Index,
+  JoinColumn,
+} from 'typeorm';
+
+import { Brand } from './brand.entity';
+import { Category } from './category.entity';
+@Entity({ name: 'products' })
+@Index(['price', 'stock'])
 export class Product {
   @PrimaryGeneratedColumn()
   id: number;
@@ -7,10 +22,33 @@ export class Product {
   name: string;
   @Column({ type: 'text' })
   description: string;
+  @Index()
   @Column({ type: 'int' })
   price: number;
   @Column({ type: 'int' })
   stock: number;
   @Column({ type: 'varchar' })
   image: string;
+  @CreateDateColumn({
+    name: 'create-at',
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createAt: Date;
+  @UpdateDateColumn({
+    name: 'update-at',
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updateAt: Date;
+  @ManyToOne(() => Brand, (brand: Brand) => brand.products)
+  @JoinColumn({ name: 'brand_id' })
+  brand: Brand;
+  @ManyToMany(() => Category, (category: Category) => category.products)
+  @JoinTable({
+    name: 'products_categories',
+    joinColumn: { name: 'product_id' },
+    inverseJoinColumn: { name: 'category_id' },
+  })
+  categories: Category[];
 }

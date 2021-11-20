@@ -24,21 +24,21 @@ export class UsersController {
   getAll() {
     return this.usersService.findAll();
   }
-  @Get('tasks')
-  getTasks() {
-    return this.usersService.getTasks();
-  }
+  // @Get('tasks')
+  // getTasks() {
+  //   return this.usersService.getTasks();
+  // }
 
   @Get(':userId')
   @HttpCode(HttpStatus.ACCEPTED)
   getOne(@Param('userId', ParseIntPipe) userId: number) {
     return this.usersService.findOne(userId);
   }
-  @Get(':userId/orders')
-  @HttpCode(HttpStatus.ACCEPTED)
-  getOrders(@Param('userId', ParseIntPipe) userId: number) {
-    return this.usersService.getOrderByUser(userId);
-  }
+  // @Get(':userId/orders')
+  // @HttpCode(HttpStatus.ACCEPTED)
+  // getOrders(@Param('userId', ParseIntPipe) userId: number) {
+  //   return this.usersService.getOrderByUser(userId);
+  // }
 
   @Post()
   create(@Body() payload: CreateUserDto) {

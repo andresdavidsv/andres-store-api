@@ -47,7 +47,7 @@ Nest is [MIT licensed](LICENSE).
 - Class Validator and Mapped Types => npm i class-validator class-transformer @nestjs/mapped-types
 - Config Env => npm i @nestjs/config
 - Joi => npm i --save joi
-- Documentation => npm install --save @nestjs/swagger swagger-ui-express
+- Documentation => npm install --save @nestjs/swagger swagger-ui-express => http://localhost:3000/docs/
 
 ## Docker Config
 - docker compose up -d andresStoreDb
@@ -66,3 +66,8 @@ Nest is [MIT licensed](LICENSE).
 - npm install pg
 - npm install @types/pg -D
 - npm install --save @nestjs/typeorm typeorm
+### Driver MySql
+- npm i mysql2 --save
+### Run Migrations
+- npm run migrations:generate -- name-of-migration
+- npm run migrations:run

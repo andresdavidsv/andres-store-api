@@ -1,7 +1,7 @@
 version: '3.3'
 
 services:
-  andresStoreDb:
+  postgres:
     image: postgres:13
     environment:
       - POSTGRES_DB=andres_store_db
@@ -11,3 +11,13 @@ services:
       - '5430:5432'
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
+
+  mysql:
+    image: mysql:5
+    environment:
+      - MYSQL_DATABASE=andres_store_db
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./mysql_data:/var/lib/mysql
