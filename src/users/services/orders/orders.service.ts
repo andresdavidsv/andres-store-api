@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 
 import { Order } from 'src/users/entities/order.entity';
 import { Customer } from 'src/users/entities/customer.entity';
+import { User } from 'src/users/entities/user.entity';
 import { CreateOrderDto, UpdateOrderDto } from '../../dtos/order.dto';
 
 @Injectable()
@@ -17,6 +18,8 @@ export class OrdersService {
     private orderRepository: Repository<Order>,
     @InjectRepository(Customer)
     private customerRepository: Repository<Customer>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
   findAll() {
     return this.orderRepository.find();
@@ -75,5 +78,20 @@ export class OrdersService {
   async delete(id: number) {
     await this.findOne(id);
     return this.orderRepository.delete(id);
+  }
+
+  async ordersByCustomer(userId: number) {
+    const customer = (
+      await this.userRepository.findOne(userId, {
+        relations: ['customer'],
+      })
+    ).customer;
+    if (!customer) {
+      throw new NotFoundException('The user not configured customer');
+    }
+    return this.orderRepository.find({
+      where: { customer: customer.id },
+      relations: ['items', 'items.product'],
+    });
   }
 }

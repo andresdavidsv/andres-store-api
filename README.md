@@ -42,6 +42,7 @@ Nest is [MIT licensed](LICENSE).
 - Modules Generate => nest g mo users
 - Resource Generate => nest g resource orders
 - Global Module Generate => nest g mo database
+- Guards Generate => nest g gu auth/guards/jwt-auth
 
 ## Dependences Example
 - Class Validator and Mapped Types => npm i class-validator class-transformer @nestjs/mapped-types
@@ -71,3 +72,15 @@ Nest is [MIT licensed](LICENSE).
 ### Run Migrations
 - npm run migrations:generate -- name-of-migration
 - npm run migrations:run
+### Guards
+- nest g mo auth
+- nest g gu auth/guards/apiKey --flat
+### Hashing
+- npm i bcrypt
+- npm i @types/bcrypt -D
+### Autenticator with Passport
+- npm install --save @nestjs/passport passport passport-local
+- npm install --save-dev @types/passport-local
+### JWT Authentication
+- npm install --save @nestjs/jwt passport-jwt
+- npm install --save-dev @types/passport-jwt

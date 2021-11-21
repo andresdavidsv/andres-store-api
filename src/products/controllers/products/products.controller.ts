@@ -9,6 +9,7 @@ import {
   Delete,
   HttpStatus,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
@@ -19,25 +20,26 @@ import {
   UpdateProductDto,
   FilterProductDto,
 } from '../../dto/products.dto';
+import { JwtAuthGuard } from './../../../auth/guards/jwt-auth/jwt-auth.guard';
+import { RolesGuard } from './../../../auth/guards/roles/roles.guard';
+import { Public } from '../../../auth/decorators/public.decorator';
+import { Roles } from '../../../auth/decorators/roles.decorator';
+import { Role } from '../../../auth/models/roles.model';
 
+@UseGuards(JwtAuthGuard, RolesGuard)
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
 
+  @Public()
   @Get()
   @ApiOperation({ summary: ' List all products' })
   getProducts(@Query() params: FilterProductDto) {
     return this.productsService.findAll(params);
   }
 
-  @Get('filter')
-  getProducFilter() {
-    return {
-      message: `Im a filter`,
-    };
-  }
-
+  @Public()
   @Get(':productId')
   @HttpCode(HttpStatus.ACCEPTED)
   getProduct(@Param('productId', ParseIntPipe) productId: number) {
@@ -47,6 +49,7 @@ export class ProductsController {
     return this.productsService.findOne(productId);
   }
 
+  @Roles(Role.ADMIN)
   @Post()
   create(@Body() payload: CreateProductDto) {
     // return {
