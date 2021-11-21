@@ -5,6 +5,7 @@ export default registerAs('config', () => {
       name: process.env.DATABASE_NAME,
       port: process.env.DATABASE_PORT,
     },
+    postgresqlUrl: process.env.DATABASE_URL,
     postgresql: {
       dbName: process.env.POSTGRES_DB,
       dbUser: process.env.POSTGRES_USER,
