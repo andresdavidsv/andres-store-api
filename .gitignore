@@ -34,4 +34,11 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
-*.env
+#dorenv environment variables file
+.env
+.env.test
+.env*.local
+
+#database files
+/postgres_data
+/mysql_data
